@@ -39,9 +39,9 @@ export async function createInvoice(formData: FormData) {
 
 }
 
-const UpdateInvoice = FormSchema.omit({id: true, date: true})
+const UpdateInvoice = FormSchema.omit({ id: true, date: true })
 export async function updateInvoice(id: string, formData: FormData) {
-  const {customerId, amount, status} = UpdateInvoice.parse({
+  const { customerId, amount, status } = UpdateInvoice.parse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
@@ -57,4 +57,11 @@ export async function updateInvoice(id: string, formData: FormData) {
 
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
+}
+
+export async function deleteInvoice(id: string) {
+  await sql`
+    delete from invoices where id = ${id}
+  `;
+  revalidatePath('/dashboard/invocies');
 }
